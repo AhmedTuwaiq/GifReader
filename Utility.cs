@@ -15,14 +15,17 @@ namespace GifReader
 
         public static void start(TextBox filePathTxtInput, TextBox output)
         {
-            filePathTxtInput.Text = @"C:\Users\WinDows\Desktop\Bigsmile.gif";
-            
             if (filePathTxtInput.Text.Length == 0)
             {
                 OpenFileDialog dialog = new OpenFileDialog();
+                dialog.InitialDirectory = "c:\\";
+                dialog.Filter = "gif files (*.gif)|*.gif";
+                dialog.FilterIndex = 2;
+                dialog.RestoreDirectory = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
+                    filePathTxtInput.Text = dialog.FileName;
                     try
                     {
                         using (BinaryReader reader = new BinaryReader(new StreamReader(dialog.FileName).BaseStream))
@@ -36,9 +39,21 @@ namespace GifReader
                         $"Details:\n\n{ex.StackTrace}");
                     }
                 }
+                else
+                {
+                    output.Text += "Error failed to open file dialog";
+                    output.AppendText(Environment.NewLine);
+                }
             }
             else
             {
+                if(!File.Exists(filePathTxtInput.Text))
+                {
+                    output.Text += "Errro file doesn't exists";
+                    output.AppendText(Environment.NewLine);
+                    return;
+                }
+
                 BinaryReader reader = new BinaryReader(File.Open(filePathTxtInput.Text, FileMode.Open));
                 process(reader, output);
             }
