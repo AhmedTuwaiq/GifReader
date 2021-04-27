@@ -17,11 +17,19 @@ namespace GifReader
         public Form1()
         {
             InitializeComponent();
+
+            Log.output = outputBox;
         }
 
         private void processBtn_Click(object sender, EventArgs e)
         {
-            Utility.start(filePathTxtInput, outputBox);
+            string filePath = Utility.getFilePath(filePathTxtInput);
+            Gif gif = new GifFactory(filePath).build();
+
+            if(gif != null)
+            {
+                Log.display(gif);
+            }
         }
     }
 }
