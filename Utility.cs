@@ -15,6 +15,8 @@ namespace GifReader
 
         public static void start(TextBox filePathTxtInput, TextBox output)
         {
+            output.Text = "";
+
             if (filePathTxtInput.Text.Length == 0)
             {
                 OpenFileDialog dialog = new OpenFileDialog();
@@ -26,6 +28,7 @@ namespace GifReader
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     filePathTxtInput.Text = dialog.FileName;
+
                     try
                     {
                         using (BinaryReader reader = new BinaryReader(new StreamReader(dialog.FileName).BaseStream))
@@ -35,27 +38,23 @@ namespace GifReader
                     }
                     catch (SecurityException ex)
                     {
-                        MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                        $"Details:\n\n{ex.StackTrace}");
+                        
                     }
-                }
-                else
-                {
-                    output.Text += "Error failed to open file dialog";
-                    output.AppendText(Environment.NewLine);
                 }
             }
             else
             {
-                if(!File.Exists(filePathTxtInput.Text))
+                if (!File.Exists(filePathTxtInput.Text))
                 {
                     output.Text += "Errro file doesn't exists";
                     output.AppendText(Environment.NewLine);
                     return;
                 }
 
-                BinaryReader reader = new BinaryReader(File.Open(filePathTxtInput.Text, FileMode.Open));
-                process(reader, output);
+                using (BinaryReader reader = new BinaryReader(new StreamReader(filePathTxtInput.Text).BaseStream))
+                {
+                    process(reader, output);
+                }
             }
         }
 
