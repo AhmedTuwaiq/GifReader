@@ -80,7 +80,7 @@ namespace GifReader
             this.Controls.Add(this.filePathTxtInput);
             this.Controls.Add(this.processBtn);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Gif Reader";
             this.ResumeLayout(false);
             this.PerformLayout();
 
